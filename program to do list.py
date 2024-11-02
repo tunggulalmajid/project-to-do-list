@@ -294,4 +294,4 @@ def hapus_jadwal():
                 
 
 if __name__ == "__main__":
-    login()
+    menu()
