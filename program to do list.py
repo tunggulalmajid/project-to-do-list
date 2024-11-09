@@ -2,6 +2,7 @@ import os
 import csv 
 import termcolor 
 
+username = "admin"
 def clear ():
     os.system("cls")
 
@@ -42,6 +43,7 @@ def menu (): #membuat fungsi dengan nama menu
             else : #input selain 1 dan 2  
                 print ("Opsi yang anda pilih tidak tersedia") #mencetak kalimat 
         except ValueError : #apabila terdapat error 
+            garis()
             termcolor.cprint ("masukkan input dalam bentuk angka", "red") #mencetak kalimat dengan warna merah
             enter() #memanggil fungsi enter
             menu () #memanggil fungsi menu 
@@ -88,6 +90,7 @@ def registrasi (): #membuat fungsi dengan nama registrasi
                 else : #jika tidak memenuhi
                     break #keluar dari pengulangan 
             except ValueError as error: # apabila terindikasi error
+                garis()
                 termcolor.cprint (error, "red") #mencetak error dengan warna merah 
 
         while True :  #perulangan apabila kondisi terpenuhi
@@ -98,6 +101,7 @@ def registrasi (): #membuat fungsi dengan nama registrasi
                 else : #jika tidak memenuhi
                     break # keluar dari perulangan 
             except ValueError as error: #apabila ada error
+                garis()
                 termcolor.cprint (error, "red") #mencetak error dengan warna merah 
 
         garis() #memanggil fungsi garis 
@@ -122,11 +126,13 @@ def login (): #membuat fungsi dengan nama login
     for i in range (len(list_username)): #perulangan sebagai index
         if username == list_username[i] and password == list_password[i] : #jika username dan password terdapat pada indeks yang sama 
             a += 1 #penanda menjadi 1 
-    if a == 1 : #jika penanda 1 
+    if a == 1 : #jika penanda 1
+        garis() 
         termcolor.cprint ("login berhasil", "green") #mencetak login berhasil berwarna hijau 
         enter() #memanggil fungsi enter
         main() #memanggil fungsi main
     else : #jika kondisi tidak terpenuhi
+        garis()
         termcolor.cprint ("login tidak berhasil, silahkan masukkan username dan password yang benar", "red") #mencetak login tidak berhasil berwarna merah 
         enter () #memanggil fungsi enter
         login() #memanggil fungsi login 
@@ -140,10 +146,10 @@ def main ():
         print (f"User : {username}".center(50))
         garis()
         print ("MENU :\n")
-        print ("1. TAMBAH JADWAL")
-        print ("2. LIHAT JADWAL")
-        print ("3. HAPUS JADWAL")
-        print ("4. KELUAR\n")
+        print ("\t\t 1. TAMBAH JADWAL")
+        print ("\t\t 2. LIHAT JADWAL")
+        print ("\t\t 3. HAPUS JADWAL")
+        print ("\t\t 4. KELUAR\n")
         garis()
         try :
             pilih = int (input ("silahkan pilih menu >>"))
@@ -191,7 +197,7 @@ def tambah_jadwal():
         cover ()
         print ("TAMBAH TUGAS".center(50))
         garis2()
-        print (f"USER SAAT INI : {username}")
+        print (f"USER SAAT INI : {username}".center(50))
         garis()
         while True :
             try :
@@ -237,83 +243,108 @@ def tambah_jadwal():
             break
 
 def lihat_jadwal():
-    clear()
-    cover()
-    print ("LIHAT TUGAS".center(50))
-    garis2()
-    print (f"USER SAAT INI : {username}")
-    garis()
     tampungan = []
     with  open (f"{"user"+username +".csv"}", mode ="r") as file:
         reader = csv.reader(file,delimiter =",")
         for i in reader :
             tampungan.append(i)
-    for i,a in enumerate(tampungan) :
-        print (f" ")
-        print (f"{i + 1}. tugas mata kuliah :  {a[0]}")
-        print (f"   deadline tugas    :  {a[1]}")
-        print (f"   deskripsi tugas   :  {a[2]}")
-    garis()
-    enter ()
-    main ()
+    if tampungan == [] :
+        clear()
+        cover()
+        print ("LIHAT TUGAS".center(50))
+        garis2()
+        print (f"USER SAAT INI : {username}".center(50))
+        garis()
+        print ("\n\n\t  TIDAK ADA TUGAS UNTUK SAAT INI\n\n")
+        garis ()
+        enter()
+        main()
+    else :    
+        clear()
+        cover()
+        print ("LIHAT TUGAS".center(50))
+        garis2()
+        print (f"USER SAAT INI : {username}".center(50))
+        garis()
+        for i,a in enumerate(tampungan) :
+            print (f" ")
+            print (f"{i + 1}. tugas mata kuliah :  {a[0]}")
+            print (f"   deadline tugas    :  {a[1]}")
+            print (f"   deskripsi tugas   :  {a[2]}")
+            print ("")
+            garis()
+        enter ()
+        main ()
         
 def hapus_jadwal():
-    while True :
+    tampungan = []
+    with  open (f"{"user"+username +".csv"}", mode ="r") as file:
+        reader = csv.reader(file,delimiter =",")
+        for i in reader :
+            tampungan.append(i)
+    if tampungan == []:
         clear()
         cover()
         print ("HAPUS TUGAS".center(50))
         garis2()
-        print (f"USER SAAT INI : {username}")
+        print (f"USER SAAT INI : {username}".center(50))
         garis()
-        tampungan = []
-        with  open (f"{"user"+username +".csv"}", mode ="r") as file:
-            reader = csv.reader(file,delimiter =",")
-            for i in reader :
-                tampungan.append(i)
+        print ("\n\n\t  TIDAK ADA TUGAS UNTUK SAAT INI\n\n".center(50))
+        garis()
+        enter()
+        main()
+
+    else :
+        while True :
+            clear()
+            cover()
+            print ("HAPUS TUGAS".center(50))
+            garis2()
+            print (f"USER SAAT INI : {username}".center(50))
+            garis()
             for i,a in enumerate(tampungan) :
                 print (f" ")
                 print (f"{i + 1}. tugas mata kuliah :  {a[0]}")
                 print (f"   deadline tugas    :  {a[1]}")
                 print (f"   deskripsi tugas   :  {a[2]}")
-            garis()
-            print (tampungan)
-        while True :
-            try :
-                hapus = int (input ("masukkan nomor tugas yang ingin dihapus >> "))
-                if hapus < 1 or hapus >len(tampungan) :
-                    raise ValueError ("inputan tidak valid")
-                else :
-                    tampungan.pop(hapus - 1)
-                    break
-            except ValueError as error:
-                termcolor.cprint(error, "red")
-                continue 
-        print (tampungan)
-        enter()
-        with open (f"{"user"+username +".csv"}", mode ="w", newline="\n") as file:  
-            writer = csv.writer (file)
-            for i in range(len(tampungan)):
-                writer.writerow([tampungan[i][0],tampungan[i][1],tampungan[i][2]])
-            garis ()
-        a = 0
-        while True :
-            try :
-                lagi = input ("ingin menghapus lagi ?... [y]/[n]")
-                if lagi.lower() == "y":
-                    enter()
-                    hapus_jadwal()
-                    break
-                elif  lagi.lower() == "n":
-                    enter()
-                    main()
-                    break
-                else :
-                    raise ValueError ("inputan tidak valid")
-            except ValueError as error :
-                termcolor.cprint(error, "red")
-                continue
+                print("")
+                garis()
+            while True :
+                try :
+                    hapus = int (input ("masukkan nomor tugas yang ingin dihapus >> "))
+                    if hapus < 1 or hapus >len(tampungan) :
+                        raise ValueError ("inputan tidak valid")
+                    else :
+                        tampungan.pop(hapus - 1)
+                        break
+                except ValueError as error:
+                    termcolor.cprint(error, "red")
+                    continue 
+            enter()
+            with open (f"{"user"+username +".csv"}", mode ="w", newline="\n") as file:  
+                writer = csv.writer (file)
+                for i in range(len(tampungan)):
+                    writer.writerow([tampungan[i][0],tampungan[i][1],tampungan[i][2]])
+                garis ()
+            a = 0
+            while True :
+                try :
+                    lagi = input ("ingin menghapus lagi ?... [y]/[n]")
+                    if lagi.lower() == "y":
+                        enter()
+                        hapus_jadwal()
+                        break
+                    elif  lagi.lower() == "n":
+                        enter()
+                        main()
+                        break
+                    else :
+                        raise ValueError ("inputan tidak valid")
+                except ValueError as error :
+                    termcolor.cprint(error, "red")
+                    continue
     
              
 
 if __name__ == "__main__":
-    menu()
+    main()
