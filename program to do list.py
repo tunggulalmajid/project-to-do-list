@@ -276,22 +276,44 @@ def hapus_jadwal():
                 print (f"   deadline tugas    :  {a[1]}")
                 print (f"   deskripsi tugas   :  {a[2]}")
             garis()
-        hapus = int (input ("masukkan nomor tugas yang ingin dihapus >> "))
-        if 0 < hapus  <= len(tampungan) :
-            tampungan.pop(hapus - 1)
-        with open (f"{"user"+username+".csv"}", mode = "w", newline= "\n") as file :
-            writer = csv.writer(file)
-            writer.writerows(tampungan)
+            print (tampungan)
+        while True :
+            try :
+                hapus = int (input ("masukkan nomor tugas yang ingin dihapus >> "))
+                if hapus < 1 or hapus >len(tampungan) :
+                    raise ValueError ("inputan tidak valid")
+                else :
+                    tampungan.pop(hapus - 1)
+                    break
+            except ValueError as error:
+                termcolor.cprint(error, "red")
+                continue 
+        print (tampungan)
+        enter()
+        with open (f"{"user"+username +".csv"}", mode ="w", newline="\n") as file:  
+            writer = csv.writer (file)
+            for i in range(len(tampungan)):
+                writer.writerow([tampungan[i][0],tampungan[i][1],tampungan[i][2]])
             garis ()
-            lagi = input ("ingin menghapus lagi ?... [y]/[n]")
-            if lagi.lower == "y":
-                enter()
+        a = 0
+        while True :
+            try :
+                lagi = input ("ingin menghapus lagi ?... [y]/[n]")
+                if lagi.lower() == "y":
+                    enter()
+                    hapus_jadwal()
+                    break
+                elif  lagi.lower() == "n":
+                    enter()
+                    main()
+                    break
+                else :
+                    raise ValueError ("inputan tidak valid")
+            except ValueError as error :
+                termcolor.cprint(error, "red")
                 continue
-            elif  lagi.lower() == "n":
-                enter()
-                main()
-                break
-                
+    
+             
 
 if __name__ == "__main__":
     menu()
